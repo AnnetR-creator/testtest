@@ -6,6 +6,7 @@ import { pitchTemplates, defaultCanvas } from '@/lib/templates';
 import TemplateCard from '@/components/TemplateCard';
 import CanvasForm from '@/components/CanvasForm';
 import PitchDeckViewer from '@/components/PitchDeckViewer';
+import { canvasToMarkdown, openInObsidian } from '@/lib/obsidian';
 
 const CANVAS_STORAGE_KEY = 'pitch-canvas-v1';
 const HISTORY_STORAGE_KEY = 'pitch-history-v1';
@@ -161,12 +162,23 @@ export default function Dashboard() {
             <div className="text-xs text-slate-400">
               Wijzigingen worden automatisch opgeslagen in je browser
             </div>
-            <button
-              onClick={() => setActiveTab('dashboard')}
-              className="px-5 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition"
-            >
-              Naar pitchdecks →
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  const md = canvasToMarkdown(canvas);
+                  openInObsidian(`Business Model Canvas - ${canvas.bedrijfsnaam || 'Onbekend'}`, md);
+                }}
+                className="px-4 py-2 border border-slate-200 text-slate-600 text-sm font-medium rounded-lg hover:bg-slate-50 transition flex items-center gap-2"
+              >
+                <span>🟣</span> Open in Obsidian
+              </button>
+              <button
+                onClick={() => setActiveTab('dashboard')}
+                className="px-5 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition"
+              >
+                Naar pitchdecks →
+              </button>
+            </div>
           </div>
         </main>
       )}

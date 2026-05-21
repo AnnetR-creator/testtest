@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { PitchTemplate, CanvasData } from '@/types/pitch';
 import SlideViewer from './SlideViewer';
+import { pitchDeckToMarkdown, openInObsidian } from '@/lib/obsidian';
 
 interface Props {
   template: PitchTemplate;
@@ -46,6 +47,15 @@ export default function PitchDeckViewer({ template, canvas, onClose, onSend }: P
           <span className="text-xs opacity-50">
             {activeSlide + 1} / {template.slides.length}
           </span>
+          <button
+            onClick={() => {
+              const md = pitchDeckToMarkdown(template, canvas);
+              openInObsidian(`${template.naam} - ${canvas.bedrijfsnaam || 'Onbekend'}`, md);
+            }}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 transition"
+          >
+            <span>🟣</span> Obsidian
+          </button>
           <button
             onClick={() => setShowSendModal(true)}
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white"
